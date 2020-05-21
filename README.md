@@ -4,17 +4,19 @@ The vulnerabilities in the TCP/IP protocols represent a special genre of vulnera
 
 SYN flood is a form of DoS attack in which attackers send many SYN requests to a victim’s TCP port, but the attackers have no intention to finish the 3-way handshake procedure. Attackers either use spoofed IP addresses or do not continue the procedure. Through this attack, attackers can flood the victim’s queue that is used for half-opened connections, i.e. the connections that has finished SYN, SYN-ACK, but has not yet gotten a final ACK back. When this queue is full, the victim cannot take any more connection. 
 
-![tcp syn flood](tcp_syn_flood.png)
+<p align="center">
+  <img src="tcp_syn_flood.png">
+</p>
 
 ## Network Setup
 
-3 machines are needed. One computer is used as the **attacker**, the second computer is used as the **victim** (e.g., server), and the third computer is used as an **observer** (e.g., client). You can set up 3 virtual machines on the same host computer, or they can set up 2 virtual machines, and then use the host computer as the third computer.
+3 machines are needed. One computer is used as the **attacker**, the second computer is used as the **victim** (e.g., server), and the third computer is used as an **observer** (e.g., client). Set up 3 virtual machines on the same host computer, or set up 2 virtual machines, and then use the host computer as the third computer.
 
-I assume that attackers are on the same physical network as the victims thus simplifying the task of determining TCP sequence numbers and source port numbers. You can use sniffer tools to collect the necessary information.
+I assume that attackers are on the same physical network as the victims thus simplifying the task of determining TCP sequence numbers and source port numbers. Use sniffer tools to collect the necessary information.
 
 ## Attack
 
-You can use the `netwox` tool to conduct the attack, and then use a sniffer tool to capture the attacking packets. While the attack is going on, run the `netstat -na` command on the victim machine, and compare the result with that before the attack.
+Use the `netwox` tool to conduct the attack, and then use a sniffer tool to capture the attacking packets. While the attack is going on, run the `netstat -na` command on the victim machine, and compare the result with that before the attack.
 
 ```bash
 # check the size of the queue for holding half-open connections
@@ -29,9 +31,9 @@ netwox 76 --help
 ```
 
 **SYN Cookie Countermeasure:**
-If it seems your attack is unsuccessful, investigate whether the **SYN cookie** mechanism is turned on. The SYN cookie is a defense mechanism to counter the SYN flooding attack. The mechanism will kick in if the machine detects that it is under the SYN flooding attack.
+If it seems the attack is unsuccessful, investigate whether the **SYN cookie** mechanism is turned on. The SYN cookie is a defense mechanism to counter the SYN flooding attack. The mechanism will kick in if the machine detects that it is under the SYN flooding attack.
 
-You can use the `sysctl` command to turn on/off the SYN cookie mechanism:
+Use the `sysctl` command to turn on/off the SYN cookie mechanism:
 
 ```bash
 sudo sysctl -a | grep cookie                 # Display the SYN cookie flag
