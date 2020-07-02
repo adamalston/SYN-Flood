@@ -1,11 +1,28 @@
-# SYN Flood Attack
+# SYN Flood
 
 [![License](https://img.shields.io/github/license/adamalston/SYN-Flood?color=black)](LICENSE)
 
-SYN flood is a form of DoS attack in which attackers send many SYN requests to a victim’s TCP port, but the attackers have no intention to finish the 3-way handshake procedure. Attackers either use spoofed IP addresses or do not continue the procedure. Through this attack, attackers can flood the victim’s queue that is used for half-opened connections, i.e. the connections that has finished SYN, SYN-ACK, but has not yet gotten a final ACK back. When this queue is full, the victim cannot take any more connection. 
+SYN flood is a form of DoS attack in which attackers send many SYN requests to a victim’s TCP port, but the attackers have no intention to finish the 3-way handshake procedure.  
 
-<p align="center">
-  <img src="assets/tcp_syn_flood.png">
+How does a SYN flood attack work?
+SYN flood attacks work by exploiting the handshake process of a TCP connection. Under normal conditions, TCP exhibits three distinct processes in order to make a connection<sup id="r1">[(a)](#ab)</sup>.
+
+1. The client requests a connection by sending a `SYN` (*synchronize*) packet to the server.
+2. The server then responds with a `SYN-ACK` packet, in order to `ACK` (*acknowledge*) the communication.
+3. The client sends an `ACK` packet to acknowledge the receipt of the packet from the server and the connection is established.
+
+After completing this sequence of packet sending and receiving, the TCP connection is open and able to send and receive data. This is called the TCP three-way handshake. This technique is the foundation for every connection established using TCP.
+
+To create a DoS, an attacker exploits the fact that after an initial `SYN` packet has been received, the server will respond back with one or more `SYN/ACK` packets and wait for the final step in the handshake. Cloudflare<sup id="r1">[[1]](#1)</sup> describes how it works<sup id="r1">[(b)](#ab)</sup>:
+
+1. The attacker sends a high volume of `SYN` packets to the targeted server, often with spoofed IP addresses.
+2. The server then responds to each one of the connection requests and leaves an open port ready to receive the response.
+3. While the server waits for the final `ACK` packet, which never arrives, the attacker continues to send more `SYN` packets. The arrival of each new `SYN` packet causes the server to temporarily maintain a new open port connection for a certain length of time, and once all the available ports have been utilized the server is unable to function normally.
+
+Attackers either use spoofed IP addresses or do not continue the procedure. Through this attack, attackers can flood the victim’s queue that is used for half-opened connections, i.e. the connections that has finished SYN, SYN-ACK, but has not yet gotten a final ACK back. When this queue is full, the victim cannot take any more connection.
+
+<p align="center" id="ab">
+  <img src="assets/tcp_syn_flood.png">  
 </p>
 
 ## Network Setup
@@ -44,3 +61,7 @@ sudo sysctl -w net.ipv4.tcp_syncookies=1     # turn on  SYN cookie
 ---
 
 Thank you for your interest, this project was fun and insightful!
+
+**Resources**
+
+1.[^](#r1) <a href="https://www.cloudflare.com/learning/ddos/syn-flood-ddos-attack/" id="1">"SYN Flood Attack"</a> <i>Cloudflare</i>
