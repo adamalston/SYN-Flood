@@ -2,9 +2,12 @@
 
 [![License](https://img.shields.io/github/license/adamalston/SYN-Flood?color=black)](LICENSE)
 
-SYN flood is a form of DoS attack in which attackers send many SYN requests to a victim’s TCP port, but the attackers have no intention to finish the 3-way handshake procedure.  
+A SYN flood is a form of DoS attack in which an attacker sends a succession of `SYN` requests to a target's server in an attempt to consume enough server resources to make the system unresponsive to legitimate traffic - thus denying service.
 
-How does a SYN flood attack work?
+> A `SYN` request and a `SYN` packet are equivalent
+
+## How does a SYN flood attack work?
+
 SYN flood attacks work by exploiting the handshake process of a TCP connection. Under normal conditions, TCP exhibits three distinct processes in order to make a connection<sup id="r1">[(a)](#ab)</sup>.
 
 1. The client requests a connection by sending a `SYN` (*synchronize*) packet to the server.
