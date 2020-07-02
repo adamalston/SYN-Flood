@@ -2,8 +2,6 @@
 
 [![License](https://img.shields.io/github/license/adamalston/SYN-Flood?color=black)](LICENSE)
 
-The vulnerabilities in the TCP/IP protocols represent a special genre of vulnerabilities in protocol designs and implementations. They provide an invaluable lesson as to why security should be designed in from the beginning, rather than being added as an afterthought.
-
 SYN flood is a form of DoS attack in which attackers send many SYN requests to a victim’s TCP port, but the attackers have no intention to finish the 3-way handshake procedure. Attackers either use spoofed IP addresses or do not continue the procedure. Through this attack, attackers can flood the victim’s queue that is used for half-opened connections, i.e. the connections that has finished SYN, SYN-ACK, but has not yet gotten a final ACK back. When this queue is full, the victim cannot take any more connection. 
 
 <p align="center">
