@@ -64,8 +64,7 @@ int main()
     ip->iph_sourceip.s_addr = rand(); // Use a random IP address
     ip->iph_destip.s_addr = inet_addr(DEST_IP);
     ip->iph_protocol = IPPROTO_TCP;    // The value is 6.
-    ip->iph_len = htons(sizeof(struct ipheader) +
-                        sizeof(struct tcpheader));
+    ip->iph_len = htons(sizeof(struct ipheader) + sizeof(struct tcpheader));
 
     // Calculate tcp checksum
     tcp->tcp_sum = calculate_tcp_checksum(ip);
