@@ -4,11 +4,11 @@
 
 A SYN flood is a form of DoS attack in which an attacker sends a succession of `SYN` requests to a target's server in an attempt to consume enough server resources to make the system unresponsive to legitimate traffic<sup id="r1">[[1]](#1)</sup> - thus denying service.
 
-> A `SYN` request and a `SYN` packet are equivalent
+> A `SYN` request and a `SYN` packet are the same things
 
 ## How does a SYN flood attack work?
 
-SYN flood attacks work by exploiting the handshake process of a TCP connection. Under normal conditions, TCP exhibits three distinct processes in order to make a connection (Figure [1a](#ab)).
+SYN flood attacks work by exploiting the handshake process of a TCP connection. Under normal conditions, TCP exhibits three distinct processes in order to make a connection (depicted in figure [1a](#ab)).
 
 1. The client requests a connection by sending a `SYN` (*synchronize*) packet to the server.
 2. The server then responds with a `SYN-ACK` packet, in order to `ACK` (*acknowledge*) the communication.
@@ -16,7 +16,7 @@ SYN flood attacks work by exploiting the handshake process of a TCP connection. 
 
 After completing this sequence of packet sending and receiving, the TCP connection is open and able to send and receive data. This is called the TCP three-way handshake. This technique is the foundation for every connection established using TCP.
 
-To create a DoS, an attacker exploits the fact that after an initial `SYN` packet has been received, the server will respond back with one or more `SYN-ACK` packets and wait for the final step in the handshake. Cloudflare<sup id="r2">[[2]](#2)</sup> describes how it works (Figure [1b](#ab)):
+To create a DoS, an attacker exploits the fact that after an initial `SYN` packet has been received, the server will respond with one or more `SYN-ACK` packets and wait for the final step in the handshake. Cloudflare<sup id="r2">[[2]](#2)</sup> describes how it works (depicted in figure [1b](#ab)):
 
 1. The attacker sends a high volume of `SYN` packets to the targeted server, often with spoofed IP addresses.
 2. The server then responds to each one of the connection requests and leaves an open port ready to receive the response.
@@ -28,9 +28,11 @@ To create a DoS, an attacker exploits the fact that after an initial `SYN` packe
 
 ## Network Setup
 
-3 machines are needed to conduct the attack in this repository. One computer is used as the **attacker**, the second computer is used as the **victim** (i.e. the server), and the third computer is used as an **observer** (i.e. the client). Set up 3 virtual machines on the same host computer, or set up 2 virtual machines, and then use the host computer as the third computer.
+The attack in this repository was conducted in a VM. Three machines are needed to carry out the attack. One machine is used as the **attacker**, another machine is used as the **victim** (i.e. the server), and the third machine is used as an **observer** (i.e. the client). 
 
-The attack was implimented under the assumption that the attackers are on the same physical network as the victims - thus simplifying the task of determining TCP sequence numbers and source port numbers. Sniffer tools can be used to collect the necessary information.
+To set up the attack, three VMs can be set up on the same host computer. Alternatively, two VMs can be set up on a host computer with the host machine itself acting as the third computer.
+
+This attack was implemented under the assumption that the attackers are on the same physical network as the victims - thus simplifying the task of determining TCP sequence numbers and source port numbers. Sniffer tools can be used to collect the necessary information.
 
 ## Attack
 
