@@ -26,11 +26,11 @@ struct ipheader
 // ICMP Header
 struct icmpheader
 {
-	unsigned char icmp_type;		// ICMP message type
-	unsigned char icmp_code;		// Error code
+	unsigned char icmp_type;        // ICMP message type
+	unsigned char icmp_code;        // Error code
 	unsigned short int icmp_chksum; // Checksum for ICMP Header and data
-	unsigned short int icmp_id;		// Used for identifying request
-	unsigned short int icmp_seq;	// Sequence number
+	unsigned short int icmp_id;     // Used for identifying request
+	unsigned short int icmp_seq;    // Sequence number
 };
 
 // UDP Header
@@ -38,8 +38,8 @@ struct udpheader
 {
 	u_int16_t udp_sport; // source port
 	u_int16_t udp_dport; // destination port
-	u_int16_t udp_ulen;	 // udp length
-	u_int16_t udp_sum;	 // udp checksum
+	u_int16_t udp_ulen;  // udp length
+	u_int16_t udp_sum;   // udp checksum
 };
 
 // TCP Header
