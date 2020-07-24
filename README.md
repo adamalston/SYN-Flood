@@ -23,7 +23,7 @@ To create a DoS, an attacker exploits the fact that after an initial `SYN` packe
 3. While the server waits for the final `ACK` packet, which never arrives, the attacker continues to send more `SYN` packets. The arrival of each new `SYN` packet causes the server to temporarily maintain a new open port connection for a certain length of time, and once all the available ports have been utilized the server is unable to function normally.
 
 <p align="center" id="ab">
-	<img src="assets/tcp_syn_flood.png">  
+    <img src="assets/tcp_syn_flood.png">
 </p>
 
 ## Network Setup
